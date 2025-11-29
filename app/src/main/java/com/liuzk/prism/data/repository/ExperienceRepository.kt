@@ -13,7 +13,7 @@ class ExperienceRepository @Inject constructor(private val apiService: ApiServic
         return experiences.map { experience ->
             experience.copy(
                 title = generateTitle(experience.username, experience.id),
-                avatarUrl = generateAvatarUrl(experience.username, experience.id),
+                avatarUrl = generateAvatarUrl(experience.username),
                 likes = generateLikes(experience.id)
             )
         }
@@ -44,7 +44,7 @@ class ExperienceRepository @Inject constructor(private val apiService: ApiServic
      * 生成头像URL - 使用UI Avatars API生成基于作者名的头像
      * 这是一个免费的API，可以根据文本生成PNG格式的头像
      */
-    private fun generateAvatarUrl(author: String, id: String): String {
+    private fun generateAvatarUrl(author: String): String {
         // 获取作者名的首字母作为头像文本
         val initials = author.split(" ")
             .take(2)
@@ -54,7 +54,6 @@ class ExperienceRepository @Inject constructor(private val apiService: ApiServic
             .ifEmpty { author.firstOrNull()?.uppercaseChar()?.toString() ?: "U" }
 
         // 使用UI Avatars生成头像，基于作者名生成颜色确保一致性
-        val nameHash = author.hashCode()
         val textColor = "FFFFFF" // 白色文字
 
         return "https://ui-avatars.com/api/?name=$initials&size=100&background=random&color=$textColor&bold=true"

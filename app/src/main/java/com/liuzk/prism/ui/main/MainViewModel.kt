@@ -33,14 +33,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
-                val newExperiences = repository.getExperiences(page = 1)
+                currentPage = (1..100).random()
+                val newExperiences = repository.getExperiences(currentPage)
                 _uiState.update {
                     it.copy(
                         isLoading = false,
                         experiences = newExperiences
                     )
                 }
-                currentPage = 1
                 isLastPage = newExperiences.isEmpty()
             } catch (e: Exception) {
                 _uiState.update { it.copy(isLoading = false, error = "Failed to fetch experiences") }
@@ -71,14 +71,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isRefreshing = true, error = null) }
             try {
-                val newExperiences = repository.getExperiences(page = 1)
+                currentPage = (1..100).random()
+                val newExperiences = repository.getExperiences(currentPage)
                 _uiState.update {
                     it.copy(
                         isRefreshing = false,
                         experiences = newExperiences
                     )
                 }
-                currentPage = 1
                 isLastPage = newExperiences.isEmpty()
             } catch (e: Exception) {
                 _uiState.update { it.copy(isRefreshing = false, error = "Failed to refresh experiences") }
